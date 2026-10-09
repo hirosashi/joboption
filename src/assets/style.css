@@ -1,4 +1,4 @@
-/* joboption — 見やすさ優先：大きめの文字・広い行間・高コントラスト */
+/* お仕事55号 — 見やすさ優先：大きめの文字・広い行間・高コントラスト */
 :root{--main:#e8590c;--main-d:#c44a08;--ink:#222;--sub:#5c5c5c;--line:#ddd;--bg:#fff8f1;--ok:#2b8a3e;--warn:#b35c00;--err:#c92a2a;--radius:10px}
 *{box-sizing:border-box}
 html{font-size:17px}
