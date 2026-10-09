@@ -8,7 +8,7 @@ return [
     'debug' => false,
     'noindex' => true,             // 準備サイトでは検索エンジンに載せない
     'site' => [
-        'name' => 'joboption',
+        'name' => 'お仕事55号',
         'tagline' => '経験をいかして、もう一度はたらく。',
         'url' => 'https://jyunbi.sakura.ne.jp/joboption',
         'operator' => '（運営者名）',

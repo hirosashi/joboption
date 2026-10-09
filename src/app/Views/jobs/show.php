@@ -56,7 +56,7 @@ $applyUrl = App::url('/jobs/' . $job['id'] . '/apply');
     <p>このお仕事に興味をお持ちの方は、お気軽にご応募ください。<br>会員登録は不要です。</p>
     <a class="btn btn-main btn-lg" href="<?= View::e($applyUrl) ?>">このお仕事に応募する</a>
     <?php if ($job['apply_tel']): ?>
-      <p class="tel">お電話での応募：<a href="tel:<?= View::e(preg_replace('/[^0-9+]/', '', (string)$job['apply_tel'])) ?>"><?= View::e($job['apply_tel']) ?></a><br><small>「joboptionを見た」とお伝えください</small></p>
+      <p class="tel">お電話での応募：<a href="tel:<?= View::e(preg_replace('/[^0-9+]/', '', (string)$job['apply_tel'])) ?>"><?= View::e($job['apply_tel']) ?></a><br><small>「お仕事55号 を見た」とお伝えください</small></p>
     <?php endif; ?>
   </div>
 </div>

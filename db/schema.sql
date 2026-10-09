@@ -1,4 +1,4 @@
--- joboption スキーマ（MySQL 8 正本）。SQLite 版は db/schema.sqlite.sql（同じ列構成を保つ）
+-- お仕事55号（joboption）スキーマ（MySQL 8 正本）。SQLite 版は db/schema.sqlite.sql（同じ列構成を保つ）
 CREATE TABLE IF NOT EXISTS admins (
   id INT AUTO_INCREMENT PRIMARY KEY,
   login_id VARCHAR(50) NOT NULL UNIQUE,
