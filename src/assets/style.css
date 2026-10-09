@@ -96,6 +96,7 @@ select:focus,input:focus,textarea:focus{outline:none;border-color:var(--main)}
 .apply-box{border:3px solid var(--main);border-radius:var(--radius);padding:20px;margin:28px 0;text-align:center}
 .apply-box .tel{margin:14px 0 0;font-size:1.1rem}
 .fixed-apply{position:fixed;left:0;right:0;bottom:0;background:rgba(255,255,255,.96);border-top:1px solid var(--line);padding:10px 16px;display:flex;gap:10px;justify-content:center;z-index:20;box-shadow:0 -2px 8px rgba(0,0,0,.08)}
+.fixed-apply .btn{white-space:nowrap;padding:12px 16px}
 .fixed-apply .btn-main{flex:1;max-width:420px}
 
 /* forms */

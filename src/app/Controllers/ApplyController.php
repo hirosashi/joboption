@@ -86,6 +86,12 @@ final class ApplyController extends Base
         if (!is_array($v) || Session::get('apply_ok_' . $id) !== true) {
             App::redirect('/jobs/' . $id . '/apply');
         }
+        $sig = hash('sha256', implode("\n", [$v['name'], $v['tel'], $v['email'], $v['message']]));
+        if (Session::get('applied_sig_' . $id) === $sig) {
+            Session::remove('apply_' . $id);
+            Session::remove('apply_ok_' . $id);
+            App::redirect('/jobs/' . $id . '/apply/done');
+        }
         $now = Clock::nowStr();
         Db::exec(
             'INSERT INTO applications (job_id, name, tel, email, message, status, created_at, updated_at) VALUES (?,?,?,?,?,?,?,?)',
@@ -95,6 +101,7 @@ final class ApplyController extends Base
         Session::remove('apply_' . $id);
         Session::remove('apply_ok_' . $id);
         Session::set('applied_' . $id, true);
+        Session::set('applied_sig_' . $id, $sig);
 
         $summary = "求人：{$job['title']}（No.{$id}）\n会社：{$job['company_name']}\n\nお名前：{$v['name']}\n電話番号：{$v['tel']}\nメール：{$v['email']}\nひとこと：\n{$v['message']}\n";
         $subject = '【' . self::siteName() . '】応募がありました（' . $job['job_name'] . '）';
