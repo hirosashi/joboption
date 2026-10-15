@@ -129,7 +129,7 @@ final class Jobs
             '@type' => 'JobPosting',
             'title' => (string)$j['job_name'],
             'description' => $desc,
-            'identifier' => ['@type' => 'PropertyValue', 'name' => (string)($site['name'] ?? 'joboption'), 'value' => (string)$j['id']],
+            'identifier' => ['@type' => 'PropertyValue', 'name' => (string)($site['name'] ?? 'お仕事55号'), 'value' => (string)$j['id']],
             'datePosted' => substr((string)($j['published_at'] ?? $j['created_at']), 0, 10),
             'employmentType' => Master::EMPLOYMENT_SCHEMA[(string)$j['employment_type']] ?? 'OTHER',
             'hiringOrganization' => array_filter(['@type' => 'Organization', 'name' => (string)$j['company_name'], 'sameAs' => (string)($j['company_url'] ?? '')]),

@@ -37,7 +37,7 @@ final class Validator
 
     public function number(string $key, string $label): self
     {
-        $v = str_replace(',', '', $this->str($key));
+        $v = self::numStr($this->str($key));
         if ($v !== '' && !is_numeric($v)) {
             $this->errors[] = "{$label}は数字で入力してください。";
         }
@@ -46,7 +46,7 @@ final class Validator
 
     public function positive(string $key, string $label): self
     {
-        $v = str_replace(',', '', $this->str($key));
+        $v = self::numStr($this->str($key));
         if ($v !== '' && (!is_numeric($v) || (float)$v < 0)) {
             $this->errors[] = "{$label}は0以上の数字で入力してください。";
         }
@@ -73,13 +73,20 @@ final class Validator
         return $this->errors;
     }
 
+    /** 全角数字・カンマ・「円」「時給」などを取り除いた数値文字列 */
+    public static function numStr(string $s): string
+    {
+        $s = mb_convert_kana($s, 'ns');
+        return str_replace([',', '，', ' ', '円', '¥', '￥', '時給', '日給', '月給', '年収'], '', $s);
+    }
+
     /** 数値入力を float|null に。空は null */
     public static function toNum(mixed $v): ?float
     {
         if (!is_string($v) && !is_numeric($v)) {
             return null;
         }
-        $s = str_replace([',', '　', ' '], '', (string)$v);
+        $s = self::numStr((string)$v);
         if ($s === '' || !is_numeric($s)) {
             return null;
         }

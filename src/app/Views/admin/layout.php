@@ -16,12 +16,12 @@ $menu = ['/admin' => 'ホーム', '/admin/jobs' => '求人', '/admin/companies' 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
-<title><?= View::e(($title ?? '') . '｜joboption 管理') ?></title>
+<title><?= View::e(($title ?? '') . '｜お仕事55号 管理') ?></title>
 <link rel="stylesheet" href="<?= View::e(App::url('/assets/style.css')) ?>">
 </head>
 <body class="adm">
 <header class="adm-hd">
-  <a class="logo" href="<?= View::e(App::url('/admin')) ?>">joboption <small>管理</small></a>
+  <a class="logo" href="<?= View::e(App::url('/admin')) ?>">お仕事55号 <small>管理</small></a>
   <?php if ($u !== null): ?>
   <nav>
     <?php foreach ($menu as $p => $label): ?>

@@ -52,6 +52,14 @@ final class JobAdminController extends Base
             $job['salary_type'] = 'hour';
             $job['status'] = 'draft';
         }
+        $old = Session::get('job_old');
+        Session::remove('job_old');
+        if (is_array($old) && (int)($old['id'] ?? 0) === $id) {
+            foreach (array_merge(self::TEXT_FIELDS, ['company_id', 'category_id', 'salary_min', 'salary_max', 'valid_until']) as $k) {
+                $job[$k] = is_string($old[$k] ?? null) ? $old[$k] : '';
+            }
+            $job['tags'] = array_fill_keys(array_map('intval', (array)($old['tags'] ?? [])), true);
+        }
         $companies = [];
         foreach (Db::rows('SELECT id, name FROM companies ORDER BY name') as $c) {
             $companies[(int)$c['id']] = (string)$c['name'];
@@ -87,6 +95,7 @@ final class JobAdminController extends Base
             $errors[] = '選択項目の値が正しくありません。';
         }
         if ($errors !== []) {
+            Session::set('job_old', $_POST + ['id' => (string)$id]);
             Session::flash('error', implode(' ', $errors));
             App::redirect('/admin/jobs/edit?id=' . $id . ($id ? '' : '&company_id=' . $companyId));
         }

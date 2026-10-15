@@ -5,7 +5,7 @@ use App\Core\View;
 
 /** @var string $content */
 $site = App::config()['site'] ?? [];
-$siteName = (string)($site['name'] ?? 'joboption');
+$siteName = (string)($site['name'] ?? 'お仕事55号');
 $pageTitle = ($title ?? '') === '' ? $siteName . '｜' . ($site['tagline'] ?? '') : $title . '｜' . $siteName;
 $path = App::currentPath();
 $flashes = Session::pullFlash();

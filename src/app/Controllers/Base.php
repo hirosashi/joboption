@@ -43,6 +43,6 @@ abstract class Base
 
     protected static function siteName(): string
     {
-        return (string)(App::config()['site']['name'] ?? 'joboption');
+        return (string)(App::config()['site']['name'] ?? 'お仕事55号');
     }
 }

@@ -8,7 +8,7 @@ use App\Core\View;
 <div class="in narrow">
   <p class="crumb"><a href="<?= View::e(App::url('/')) ?>">トップ</a> ＞ 掲載をご希望の企業様へ</p>
   <h1 class="page-ttl">掲載をご希望の企業様へ</h1>
-  <p>joboption は、経験豊かなシニア世代をはじめ、年齢を問わず「自分のペースで働きたい」方と企業をつなぐ求人サイトです。</p>
+  <p>お仕事55号 は、経験豊かなシニア世代をはじめ、年齢を問わず「自分のペースで働きたい」方と企業をつなぐ求人サイトです。</p>
   <ul class="check">
     <li>求人の掲載は<strong>無料</strong>です</li>
     <li>原稿は運営者が作成をお手伝いします（お電話でのヒアリングでOK）</li>
