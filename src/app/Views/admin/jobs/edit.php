@@ -31,7 +31,7 @@ $id = (int)$job['id'];
   </fieldset>
   <fieldset><legend>給与</legend>
     <label class="field"><span class="lbl">給与の種類</span><?= View::select('salary_type', Master::SALARY_TYPES, $job['salary_type']) ?></label>
-    <label class="field"><span class="lbl">下限（円）</span><input type="text" inputmode="numeric" name="salary_min" value="<?= View::e($job['salary_min']) ?>"></label>
+    <label class="field"><span class="lbl">下限（円）</span><input type="text" inputmode="numeric" name="salary_min" value="<?= View::e($job['salary_min']) ?>" placeholder="例：1200"></label>
     <label class="field"><span class="lbl">上限（円・なければ空欄）</span><input type="text" inputmode="numeric" name="salary_max" value="<?= View::e($job['salary_max']) ?>"></label>
     <?= $t('salary_note', '給与の補足', '例：交通費別途支給（月2万円まで）') ?>
   </fieldset>
