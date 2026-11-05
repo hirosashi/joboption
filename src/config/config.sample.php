@@ -7,6 +7,7 @@ return [
     'base_path' => '/joboption',   // 公開URLのサブディレクトリ（ルート直下なら ''）
     'debug' => false,
     'noindex' => true,             // 準備サイトでは検索エンジンに載せない
+    'ga_measurement_id' => '',     // Googleアナリティクス4 の測定ID（例：G-XXXXXXXXXX）。空なら計測タグを出さない
     'site' => [
         'name' => 'お仕事55号',
         'tagline' => '経験をいかして、もう一度はたらく。',

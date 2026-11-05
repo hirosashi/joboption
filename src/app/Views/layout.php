@@ -12,6 +12,7 @@ $metaDesc = (string)($description ?? '') !== '' ? (string)$description : $siteNa
 $canonical = App::absUrl($path);
 $ogImageUrl = !empty($ogImage) ? (string)$ogImage : App::absUrl('/assets/ogp.png');
 $flashes = Session::pullFlash();
+$gaId = (string)(App::config()['ga_measurement_id'] ?? '');
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -39,6 +40,10 @@ $flashes = Session::pullFlash();
 <link rel="apple-touch-icon" href="<?= View::e(App::url('/assets/apple-touch-icon.png')) ?>">
 <link rel="stylesheet" href="<?= View::e(App::url('/assets/style.css')) ?>">
 <?php if (!empty($jsonLd)): ?><script type="application/ld+json"><?= $jsonLd ?></script><?php endif; ?>
+<?php if (preg_match('/^G-[A-Z0-9]+$/', $gaId)): ?>
+<script async src="https://www.googletagmanager.com/gtag/js?id=<?= View::e($gaId) ?>"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','<?= View::e($gaId) ?>');</script>
+<?php endif; ?>
 </head>
 <body>
 <header class="hd">
