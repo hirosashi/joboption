@@ -16,6 +16,7 @@ img{max-width:100%}
 .hd{background:#fff;border-bottom:3px solid var(--main);position:sticky;top:0;z-index:10}
 .hd .in{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:64px;flex-wrap:wrap}
 .logo{font-weight:800;font-size:1.6rem;color:var(--main);text-decoration:none;letter-spacing:.02em;line-height:1.2}
+.logo img{display:block;height:60px;width:auto;margin:5px 0}
 .logo small{display:block;font-size:.7rem;color:var(--sub);font-weight:normal;letter-spacing:0}
 .hd-nav{display:flex;gap:6px}
 .hd-nav a{padding:8px 14px;border-radius:999px;text-decoration:none;color:var(--ink);font-weight:bold}
@@ -171,6 +172,7 @@ select:focus,input:focus,textarea:focus{outline:none;border-color:var(--main)}
 form.inline{margin:0}
 
 @media (max-width:760px){
+  .hd .logo img{height:46px}
   html{font-size:16px}
   .sp{display:inline}
   .hero h1{font-size:1.6rem}

@@ -18,13 +18,16 @@ $flashes = Session::pullFlash();
 <title><?= View::e($pageTitle) ?></title>
 <?php if (!empty($description)): ?><meta name="description" content="<?= View::e($description) ?>"><?php endif; ?>
 <?php if (!empty(App::config()['noindex']) || !empty($noindex)): ?><meta name="robots" content="noindex,nofollow"><?php endif; ?>
+<link rel="icon" href="<?= View::e(App::url('/favicon.ico')) ?>" sizes="48x48">
+<link rel="icon" href="<?= View::e(App::url('/assets/icon-192.png')) ?>" type="image/png" sizes="192x192">
+<link rel="apple-touch-icon" href="<?= View::e(App::url('/assets/apple-touch-icon.png')) ?>">
 <link rel="stylesheet" href="<?= View::e(App::url('/assets/style.css')) ?>">
 <?php if (!empty($jsonLd)): ?><script type="application/ld+json"><?= $jsonLd ?></script><?php endif; ?>
 </head>
 <body>
 <header class="hd">
   <div class="in">
-    <a class="logo" href="<?= View::e(App::url('/')) ?>"><?= View::e($siteName) ?><small><?= View::e($site['tagline'] ?? '') ?></small></a>
+    <a class="logo" href="<?= View::e(App::url('/')) ?>"><img src="<?= View::e(App::url('/assets/logo.png')) ?>" width="266" height="60" alt="<?= View::e($siteName . '｜' . ($site['tagline'] ?? '')) ?>"></a>
     <nav class="hd-nav">
       <a href="<?= View::e(App::url('/jobs')) ?>" class="<?= str_starts_with($path, '/jobs') ? 'on' : '' ?>">お仕事をさがす</a>
       <a href="<?= View::e(App::url('/for-companies')) ?>" class="<?= str_starts_with($path, '/for-companies') ? 'on' : '' ?>">企業の方へ</a>

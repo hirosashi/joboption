@@ -17,6 +17,9 @@ $menu = ['/admin' => 'ホーム', '/admin/jobs' => '求人', '/admin/companies' 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
 <title><?= View::e(($title ?? '') . '｜お仕事55号 管理') ?></title>
+<link rel="icon" href="<?= View::e(App::url('/favicon.ico')) ?>" sizes="48x48">
+<link rel="icon" href="<?= View::e(App::url('/assets/icon-192.png')) ?>" type="image/png" sizes="192x192">
+<link rel="apple-touch-icon" href="<?= View::e(App::url('/assets/apple-touch-icon.png')) ?>">
 <link rel="stylesheet" href="<?= View::e(App::url('/assets/style.css')) ?>">
 </head>
 <body class="adm">
