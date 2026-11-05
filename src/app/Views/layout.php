@@ -18,10 +18,6 @@ $gaId = (string)(App::config()['ga_measurement_id'] ?? '');
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<?php if (preg_match('/^G-[A-Z0-9]+$/', $gaId)): ?>
-<script async src="https://www.googletagmanager.com/gtag/js?id=<?= View::e($gaId) ?>"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','<?= View::e($gaId) ?>');</script>
-<?php endif; ?>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title><?= View::e($pageTitle) ?></title>
 <meta name="description" content="<?= View::e($metaDesc) ?>">
