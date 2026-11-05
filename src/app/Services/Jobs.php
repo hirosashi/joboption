@@ -114,6 +114,42 @@ final class Jobs
         return trim((string)$j['prefecture'] . (string)($j['city'] ?? ''));
     }
 
+    /** 求人ページの title / description / og:image を登録内容から作る @param array<string, mixed> $j @return array{title: string, description: string, image: ?string} */
+    public static function meta(array $j): array
+    {
+        $flat = static fn(mixed $v): string => trim((string)preg_replace('/\s+/u', ' ', (string)$v));
+        $place = self::place($j);
+        $emp = Master::EMPLOYMENT_TYPES[(string)$j['employment_type']] ?? '';
+        $title = $flat($j['title']);
+        if (!str_contains($title, $flat($j['job_name']))) {
+            $title = $flat($j['job_name']) . '｜' . $title;
+        }
+        $title .= '（' . implode('・', array_filter([$place, $emp])) . '）';
+        $parts = [$place . 'の' . $flat($j['job_name']) . ($emp !== '' ? '（' . $emp . '）' : '') . 'のお仕事｜' . $flat($j['company_name']) . '。'];
+        $salary = self::salary($j);
+        if ($salary !== '') {
+            $parts[] = '給与：' . $salary . '。';
+        }
+        $when = implode('・', array_filter([$flat($j['work_days'] ?? ''), $flat($j['work_hours'] ?? '')]));
+        if ($when !== '') {
+            $parts[] = '勤務：' . $when . '。';
+        }
+        if (!empty($j['tags'])) {
+            $parts[] = implode('・', array_map('strval', $j['tags'])) . '。';
+        }
+        $parts[] = $flat($j['catch_copy'] ?? '');
+        $parts[] = $flat($j['description'] ?? '');
+        $desc = trim(implode('', $parts));
+        if (mb_strlen($desc) > 160) {
+            $desc = mb_substr($desc, 0, 159) . '…';
+        }
+        return [
+            'title' => $title,
+            'description' => $desc,
+            'image' => empty($j['image1']) ? null : App::absUrl('/uploads/jobs/' . rawurlencode((string)$j['image1'])),
+        ];
+    }
+
     /** Googleしごと検索向け JobPosting 構造化データ @param array<string, mixed> $j */
     public static function jsonLd(array $j): string
     {
@@ -140,6 +176,19 @@ final class Jobs
                 'addressCountry' => 'JP',
             ])],
         ];
+        $data['url'] = App::absUrl('/jobs/' . (int)$j['id']);
+        $images = [];
+        foreach (JobImages::SLOTS as $slot) {
+            if (!empty($j[$slot])) {
+                $images[] = App::absUrl('/uploads/jobs/' . rawurlencode((string)$j[$slot]));
+            }
+        }
+        if ($images !== []) {
+            $data['image'] = $images;
+        }
+        if (trim((string)($j['work_hours'] ?? '')) !== '') {
+            $data['workHours'] = (string)$j['work_hours'];
+        }
         if (!empty($j['valid_until'])) {
             $data['validThrough'] = (string)$j['valid_until'] . 'T23:59';
         }
