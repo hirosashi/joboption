@@ -8,6 +8,9 @@ $site = App::config()['site'] ?? [];
 $siteName = (string)($site['name'] ?? 'お仕事55号');
 $pageTitle = ($title ?? '') === '' ? $siteName . '｜' . ($site['tagline'] ?? '') : $title . '｜' . $siteName;
 $path = App::currentPath();
+$metaDesc = (string)($description ?? '') !== '' ? (string)$description : $siteName . 'は、シニア世代が経験をいかして活躍できるお仕事を集めた求人サイトです。会員登録なしでかんたんに応募できます。';
+$canonical = App::absUrl($path);
+$ogImageUrl = !empty($ogImage) ? (string)$ogImage : App::absUrl('/assets/ogp.png');
 $flashes = Session::pullFlash();
 ?>
 <!DOCTYPE html>
@@ -16,7 +19,20 @@ $flashes = Session::pullFlash();
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title><?= View::e($pageTitle) ?></title>
-<?php if (!empty($description)): ?><meta name="description" content="<?= View::e($description) ?>"><?php endif; ?>
+<meta name="description" content="<?= View::e($metaDesc) ?>">
+<link rel="canonical" href="<?= View::e($canonical) ?>">
+<meta property="og:site_name" content="<?= View::e($siteName) ?>">
+<meta property="og:type" content="<?= View::e($ogType ?? 'website') ?>">
+<meta property="og:title" content="<?= View::e($pageTitle) ?>">
+<meta property="og:description" content="<?= View::e($metaDesc) ?>">
+<meta property="og:url" content="<?= View::e($canonical) ?>">
+<meta property="og:image" content="<?= View::e($ogImageUrl) ?>">
+<meta property="og:locale" content="ja_JP">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="<?= View::e($pageTitle) ?>">
+<meta name="twitter:description" content="<?= View::e($metaDesc) ?>">
+<meta name="twitter:image" content="<?= View::e($ogImageUrl) ?>">
+<meta name="theme-color" content="#e8590c">
 <?php if (!empty(App::config()['noindex']) || !empty($noindex)): ?><meta name="robots" content="noindex,nofollow"><?php endif; ?>
 <link rel="icon" href="<?= View::e(App::url('/favicon.ico')) ?>" sizes="48x48">
 <link rel="icon" href="<?= View::e(App::url('/assets/icon-192.png')) ?>" type="image/png" sizes="192x192">

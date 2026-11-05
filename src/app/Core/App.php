@@ -40,6 +40,13 @@ final class App
         return self::basePath() . '/' . ltrim($path, '/');
     }
 
+    /** サイトURL（config site.url）のスキーム・ホストを付けた絶対URL */
+    public static function absUrl(string $path): string
+    {
+        $origin = (string)preg_replace('#^(https?://[^/]+).*$#', '$1', (string)(self::config()['site']['url'] ?? ''));
+        return $origin . self::url($path);
+    }
+
     public static function redirect(string $path): never
     {
         header('Location: ' . self::url($path));
