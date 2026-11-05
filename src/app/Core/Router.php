@@ -24,6 +24,9 @@ final class Router
     public function dispatch(): void
     {
         $method = (string)($_SERVER['REQUEST_METHOD'] ?? 'GET');
+        if ($method === 'HEAD') {
+            $method = 'GET';
+        }
         $path = App::currentPath();
         $h = $this->routes[$method][$path] ?? null;
         $args = [];

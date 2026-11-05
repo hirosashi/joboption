@@ -2,6 +2,7 @@
 use App\Core\App;
 use App\Core\Csrf;
 use App\Core\View;
+use App\Services\JobImages;
 use App\Services\Master;
 
 /** @var array<string, mixed> $job */
@@ -16,7 +17,7 @@ $id = (int)$job['id'];
   <p class="flash warn">先に<a href="<?= View::e(App::url('/admin/companies/edit')) ?>">企業を登録</a>してください。</p>
 <?php endif; ?>
 <?php if ($id && $job['status'] === 'published'): ?><p><a href="<?= View::e(App::url('/jobs/' . $id)) ?>" target="_blank">公開ページを見る ↗</a></p><?php endif; ?>
-<form method="post" action="<?= View::e(App::url('/admin/jobs/save')) ?>" class="form grid-form">
+<form method="post" action="<?= View::e(App::url('/admin/jobs/save')) ?>" class="form grid-form" enctype="multipart/form-data">
   <?= Csrf::field() ?>
   <input type="hidden" name="id" value="<?= $id ?>">
   <fieldset><legend>基本</legend>
@@ -28,6 +29,19 @@ $id = (int)$job['id'];
     <label class="field"><span class="lbl">雇用形態</span><?= View::select('employment_type', Master::EMPLOYMENT_TYPES, $job['employment_type']) ?></label>
     <label class="field"><span class="lbl">掲載期限</span><input type="date" name="valid_until" value="<?= View::e($job['valid_until']) ?>"></label>
     <?= str_replace('class="field"', 'class="field wide"', $t('catch_copy', 'キャッチコピー（一覧・説明文に使います）', '例：60代の方も多数活躍中。マイペースに働けます。')) ?>
+  </fieldset>
+  <fieldset><legend>写真（3枚まで）</legend>
+    <p class="wide help">1枚目は一覧と詳細ページの上部、2・3枚目は詳細ページの「仕事内容」の下に表示します。スマホで撮った写真もそのまま選べます（自動で縮小します）。</p>
+    <?php foreach (JobImages::SLOTS as $i => $k): ?>
+    <div class="field photo-slot">
+      <span class="lbl">写真<?= $i + 1 ?><?= $i === 0 ? '（メイン）' : '' ?></span>
+      <?php if (!empty($job[$k])): ?>
+        <img class="photo-thumb" src="<?= View::e(JobImages::url((string)$job[$k])) ?>" alt="">
+        <label class="photo-del"><input type="checkbox" name="del_<?= $k ?>" value="1"> この写真を削除</label>
+      <?php endif; ?>
+      <input type="file" name="<?= $k ?>" accept="image/jpeg,image/png,image/webp" class="js-photo">
+    </div>
+    <?php endforeach; ?>
   </fieldset>
   <fieldset><legend>給与</legend>
     <label class="field"><span class="lbl">給与の種類</span><?= View::select('salary_type', Master::SALARY_TYPES, $job['salary_type']) ?></label>
@@ -72,3 +86,28 @@ $id = (int)$job['id'];
   <form method="post" action="<?= View::e(App::url('/admin/jobs/delete')) ?>" onsubmit="return confirm('削除しますか？（応募がある場合は掲載終了になります）')"><?= Csrf::field() ?><input type="hidden" name="id" value="<?= $id ?>"><button class="btn btn-del">削除</button></form>
 </div>
 <?php endif; ?>
+<script>
+document.querySelectorAll('.js-photo').forEach(function (input) {
+  input.addEventListener('change', async function () {
+    var f = input.files && input.files[0];
+    if (!f || !window.createImageBitmap || !window.DataTransfer) { return; }
+    try {
+      var bmp = await createImageBitmap(f, {imageOrientation: 'from-image'});
+      var r = Math.min(1, 1600 / Math.max(bmp.width, bmp.height));
+      if (r === 1 && f.size < 1500000) { return; }
+      var c = document.createElement('canvas');
+      c.width = Math.round(bmp.width * r);
+      c.height = Math.round(bmp.height * r);
+      var g = c.getContext('2d');
+      g.fillStyle = '#fff';
+      g.fillRect(0, 0, c.width, c.height);
+      g.drawImage(bmp, 0, 0, c.width, c.height);
+      var blob = await new Promise(function (ok) { c.toBlob(ok, 'image/jpeg', 0.85); });
+      if (!blob) { return; }
+      var dt = new DataTransfer();
+      dt.items.add(new File([blob], f.name.replace(/\.[^.]+$/, '') + '.jpg', {type: 'image/jpeg'}));
+      input.files = dt.files;
+    } catch (e) { /* 縮小できないときは元のファイルのまま送る */ }
+  });
+});
+</script>

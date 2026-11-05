@@ -12,6 +12,7 @@ use App\Core\Db;
 use App\Core\Session;
 use App\Core\Validator;
 use App\Core\View;
+use App\Services\JobImages;
 use App\Services\Jobs;
 use App\Services\Master;
 
@@ -47,7 +48,7 @@ final class JobAdminController extends Base
             self::notFound();
         }
         if ($job === null) {
-            $job = array_fill_keys(self::TEXT_FIELDS, '') + ['id' => 0, 'company_id' => App::intParam('company_id'), 'category_id' => 0, 'salary_min' => null, 'salary_max' => null, 'valid_until' => Clock::now()->modify('+90 days')->format('Y-m-d'), 'tags' => []];
+            $job = array_fill_keys(self::TEXT_FIELDS, '') + ['id' => 0, 'company_id' => App::intParam('company_id'), 'category_id' => 0, 'salary_min' => null, 'salary_max' => null, 'valid_until' => Clock::now()->modify('+90 days')->format('Y-m-d'), 'tags' => [], 'image1' => null, 'image2' => null, 'image3' => null];
             $job['employment_type'] = 'part';
             $job['salary_type'] = 'hour';
             $job['status'] = 'draft';
@@ -94,6 +95,11 @@ final class JobAdminController extends Base
         if (!isset(Master::EMPLOYMENT_TYPES[(string)$d['employment_type']]) || !isset(Master::SALARY_TYPES[(string)$d['salary_type']]) || !isset(Master::JOB_STATUS[(string)$d['status']]) || !in_array($d['prefecture'], Master::PREFECTURES, true)) {
             $errors[] = '選択項目の値が正しくありません。';
         }
+        foreach (JobImages::SLOTS as $i => $k) {
+            if (($e = JobImages::check($_FILES[$k] ?? null, '写真' . ($i + 1))) !== null) {
+                $errors[] = $e;
+            }
+        }
         if ($errors !== []) {
             Session::set('job_old', $_POST + ['id' => (string)$id]);
             Session::flash('error', implode(' ', $errors));
@@ -108,8 +114,39 @@ final class JobAdminController extends Base
         $d['valid_until'] = Validator::toDate($_POST['valid_until'] ?? '');
         $now = Clock::nowStr();
         $tagIds = array_values(array_intersect(array_map('intval', (array)($_POST['tags'] ?? [])), array_keys(Master::tags())));
+        $oldImages = $id > 0 ? (Db::row('SELECT image1, image2, image3 FROM jobs WHERE id = ?', [$id]) ?? []) : [];
+        $newFiles = [];
+        $dropFiles = [];
+        try {
+            foreach (JobImages::SLOTS as $k) {
+                $cur = $oldImages[$k] ?? null;
+                $d[$k] = $cur;
+                if ((int)($_FILES[$k]['error'] ?? UPLOAD_ERR_NO_FILE) === UPLOAD_ERR_OK) {
+                    $d[$k] = $newFiles[] = JobImages::store((string)$_FILES[$k]['tmp_name']);
+                } elseif (!empty($_POST['del_' . $k])) {
+                    $d[$k] = null;
+                }
+                if ($cur !== null && $cur !== $d[$k]) {
+                    $dropFiles[] = $cur;
+                }
+            }
+            $id = self::persist($id, $d, $now, $tagIds);
+        } catch (\Throwable $e) {
+            array_map([JobImages::class, 'remove'], $newFiles);
+            throw $e;
+        }
+        array_map([JobImages::class, 'remove'], $dropFiles);
+        Session::flash('ok', '保存しました。');
+        App::redirect('/admin/jobs/edit?id=' . $id);
+    }
 
-        $id = Db::tx(static function () use ($id, $d, $now, $tagIds): int {
+    /**
+     * @param array<string, mixed> $d
+     * @param array<int, int> $tagIds
+     */
+    private static function persist(int $id, array $d, string $now, array $tagIds): int
+    {
+        return Db::tx(static function () use ($id, $d, $now, $tagIds): int {
             $old = $id > 0 ? Db::row('SELECT status, published_at FROM jobs WHERE id = ?', [$id]) : null;
             $d['published_at'] = $old['published_at'] ?? null;
             if ($d['status'] === 'published' && $d['published_at'] === null) {
@@ -131,8 +168,6 @@ final class JobAdminController extends Base
             }
             return $id;
         });
-        Session::flash('ok', '保存しました。');
-        App::redirect('/admin/jobs/edit?id=' . $id);
     }
 
     public static function copy(): void
@@ -148,6 +183,9 @@ final class JobAdminController extends Base
             $d = [];
             foreach (array_merge(self::TEXT_FIELDS, ['company_id', 'category_id', 'salary_min', 'salary_max', 'valid_until']) as $k) {
                 $d[$k] = $job[$k];
+            }
+            foreach (JobImages::SLOTS as $k) {
+                $d[$k] = JobImages::duplicate($job[$k] ?? null);
             }
             $d['title'] = $job['title'] . '（コピー）';
             $d['status'] = 'draft';
@@ -174,7 +212,9 @@ final class JobAdminController extends Base
             Db::exec("UPDATE jobs SET status = 'closed', updated_at = ? WHERE id = ?", [Clock::nowStr(), $id]);
             Session::flash('warn', '応募がある求人なので削除せず「掲載終了」にしました。');
         } else {
+            $images = Db::row('SELECT image1, image2, image3 FROM jobs WHERE id = ?', [$id]) ?? [];
             Db::exec('DELETE FROM jobs WHERE id = ?', [$id]);
+            array_map([JobImages::class, 'remove'], array_values($images));
             Session::flash('ok', '削除しました。');
         }
         App::redirect('/admin/jobs');
