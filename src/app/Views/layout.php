@@ -40,7 +40,8 @@ $flashes = Session::pullFlash();
 </main>
 <footer class="ft">
   <div class="in">
-    <a class="ft-logo" href="<?= View::e(App::url('/')) ?>"><img src="<?= View::e(App::url('/assets/logo-footer.png')) ?>" width="220" height="191" alt="<?= View::e($siteName) ?>"></a>
+    <div class="ft-row">
+    <a class="ft-logo" href="<?= View::e(App::url('/')) ?>"><img src="<?= View::e(App::url('/assets/logo-footer.png')) ?>" width="110" height="95" alt="<?= View::e($siteName) ?>"></a>
     <nav class="ft-nav">
       <a href="<?= View::e(App::url('/jobs')) ?>">お仕事をさがす</a>
       <a href="<?= View::e(App::url('/for-companies')) ?>">掲載をご希望の企業様へ</a>
@@ -48,6 +49,7 @@ $flashes = Session::pullFlash();
       <a href="<?= View::e(App::url('/terms')) ?>">利用規約</a>
       <a href="<?= View::e(App::url('/privacy')) ?>">プライバシーポリシー</a>
     </nav>
+    </div>
     <p class="copy">&copy; <?= View::e($siteName) ?></p>
   </div>
 </footer>
