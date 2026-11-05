@@ -14,7 +14,7 @@ echo "== backup"
 
 echo "== upload src"
 tar czf - -C src --exclude=config/config.php --exclude=config/config.local.php \
-  --exclude='storage/db/*.sqlite*' --exclude='storage/logs/*.log' . \
+  --exclude='storage/db/*.sqlite*' --exclude='storage/logs/*.log' --exclude='uploads/jobs/*.jpg' . \
   | "${SSH[@]}" "mkdir -p ~/$REMOTE && tar xzf - -C ~/$REMOTE"
 
 echo "== upload tools/db"

@@ -1,6 +1,7 @@
 <?php
 use App\Core\App;
 use App\Core\View;
+use App\Services\JobImages;
 use App\Services\Jobs;
 use App\Services\Master;
 
@@ -8,6 +9,7 @@ use App\Services\Master;
 ?>
 <li class="card">
   <a href="<?= View::e(App::url('/jobs/' . $job['id'])) ?>">
+    <?php if (!empty($job['image1'])): ?><img class="card-img" src="<?= View::e(JobImages::url((string)$job['image1'])) ?>" alt="" loading="lazy"><?php endif; ?>
     <p class="card-cat"><?= View::e($job['category_name'] ?? '') ?>｜<?= View::e(Master::EMPLOYMENT_TYPES[$job['employment_type']] ?? '') ?></p>
     <h3 class="card-ttl"><?= View::e($job['title']) ?></h3>
     <p class="card-co"><?= View::e($job['company_name']) ?></p>

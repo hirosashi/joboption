@@ -6,3 +6,4 @@ src/storage/db/*
 !src/storage/db/.gitkeep
 *.log
 .DS_Store
+src/uploads/jobs/*.jpg
