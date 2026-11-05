@@ -69,6 +69,7 @@ $gaId = (string)(App::config()['ga_measurement_id'] ?? '');
       <a href="<?= View::e(App::url('/about')) ?>">運営者情報</a>
       <a href="<?= View::e(App::url('/terms')) ?>">利用規約</a>
       <a href="<?= View::e(App::url('/privacy')) ?>">プライバシーポリシー</a>
+      <a href="https://www.4arrows-japan.com/company/" target="_blank" rel="noopener">運営会社：４.ARROWS 株式会社</a>
     </nav>
     </div>
     <p class="copy">&copy; <?= View::e($siteName) ?></p>
