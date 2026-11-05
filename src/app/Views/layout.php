@@ -12,11 +12,16 @@ $metaDesc = (string)($description ?? '') !== '' ? (string)$description : $siteNa
 $canonical = App::absUrl($path);
 $ogImageUrl = !empty($ogImage) ? (string)$ogImage : App::absUrl('/assets/ogp.png');
 $flashes = Session::pullFlash();
+$gaId = (string)(App::config()['ga_measurement_id'] ?? '');
 ?>
 <!DOCTYPE html>
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
+<?php if (preg_match('/^G-[A-Z0-9]+$/', $gaId)): ?>
+<script async src="https://www.googletagmanager.com/gtag/js?id=<?= View::e($gaId) ?>"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','<?= View::e($gaId) ?>');</script>
+<?php endif; ?>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title><?= View::e($pageTitle) ?></title>
 <meta name="description" content="<?= View::e($metaDesc) ?>">
