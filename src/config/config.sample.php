@@ -1,16 +1,17 @@
 <?php
 // サーバ用は config.php、ローカルは config.local.php にコピーして値を設定する（Git管理外）
 return [
-    // 準備サイト・ローカルは SQLite、本番は MySQL を想定（どちらでも動く）
+    // SQLite・MySQL のどちらでも動く
     'db' => ['driver' => 'sqlite', 'path' => __DIR__ . '/../storage/db/joboption.sqlite'],
     // 'db' => ['driver' => 'mysql', 'host' => 'localhost', 'name' => 'DB名', 'user' => 'ユーザー', 'pass' => 'パスワード'],
-    'base_path' => '/joboption',   // 公開URLのサブディレクトリ（ルート直下なら ''）
+    'base_path' => '',            // 公開URLのサブディレクトリ（ルート直下なら ''）
     'debug' => false,
-    'noindex' => true,             // 準備サイトでは検索エンジンに載せない
+    'noindex' => true,             // 公開サイトでは false にして検索エンジンに載せる
+    'ga_measurement_id' => '',     // Googleアナリティクス4 の測定ID（例：G-XXXXXXXXXX）。空なら計測タグを出さない
     'site' => [
-        'name' => 'joboption',
+        'name' => 'お仕事55号',
         'tagline' => '経験をいかして、もう一度はたらく。',
-        'url' => 'https://jyunbi.sakura.ne.jp/joboption',
+        'url' => 'https://oshigoto55.com',
         'operator' => '（運営者名）',
         'operator_address' => '（所在地）',
         'operator_tel' => '（電話番号）',

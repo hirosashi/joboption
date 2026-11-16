@@ -1,6 +1,7 @@
 <?php
 use App\Core\App;
 use App\Core\View;
+use App\Services\JobImages;
 use App\Services\Jobs;
 use App\Services\Master;
 
@@ -32,6 +33,7 @@ $applyUrl = App::url('/jobs/' . $job['id'] . '/apply');
   <h1 class="page-ttl"><?= View::e($job['title']) ?></h1>
   <p class="detail-co"><?= View::e($job['company_name']) ?></p>
   <?php if ($job['tags'] !== []): ?><ul class="tags"><?php foreach ($job['tags'] as $t): ?><li><?= View::e($t) ?></li><?php endforeach; ?></ul><?php endif; ?>
+  <?php if (!empty($job['image1'])): ?><img class="detail-photo" src="<?= View::e(JobImages::url((string)$job['image1'])) ?>" alt="<?= View::e($job['job_name']) ?>の写真"><?php endif; ?>
 
   <dl class="point">
     <div><dt>給与</dt><dd class="pay"><?= View::e(Jobs::salary($job)) ?></dd></div>
@@ -44,6 +46,10 @@ $applyUrl = App::url('/jobs/' . $job['id'] . '/apply');
 
   <h2 class="sec-ttl">仕事内容</h2>
   <p class="text"><?= nl2br(View::e($job['description'])) ?></p>
+  <?php $subPhotos = array_filter([$job['image2'] ?? '', $job['image3'] ?? '']); ?>
+  <?php if ($subPhotos !== []): ?>
+  <div class="photos"><?php foreach ($subPhotos as $n): ?><img src="<?= View::e(JobImages::url((string)$n)) ?>" alt="<?= View::e($job['job_name']) ?>の写真" loading="lazy"><?php endforeach; ?></div>
+  <?php endif; ?>
 
   <h2 class="sec-ttl">募集要項</h2>
   <table class="spec">
@@ -56,7 +62,7 @@ $applyUrl = App::url('/jobs/' . $job['id'] . '/apply');
     <p>このお仕事に興味をお持ちの方は、お気軽にご応募ください。<br>会員登録は不要です。</p>
     <a class="btn btn-main btn-lg" href="<?= View::e($applyUrl) ?>">このお仕事に応募する</a>
     <?php if ($job['apply_tel']): ?>
-      <p class="tel">お電話での応募：<a href="tel:<?= View::e(preg_replace('/[^0-9+]/', '', (string)$job['apply_tel'])) ?>"><?= View::e($job['apply_tel']) ?></a><br><small>「joboptionを見た」とお伝えください</small></p>
+      <p class="tel">お電話での応募：<a href="tel:<?= View::e(preg_replace('/[^0-9+]/', '', (string)$job['apply_tel'])) ?>"><?= View::e($job['apply_tel']) ?></a><br><small>「お仕事55号 を見た」とお伝えください</small></p>
     <?php endif; ?>
   </div>
 </div>

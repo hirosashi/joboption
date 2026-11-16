@@ -1,4 +1,4 @@
--- joboption スキーマ（SQLite 版。正本は db/schema.sql、列構成を揃える）
+-- お仕事55号（joboption）スキーマ（SQLite 版。正本は db/schema.sql、列構成を揃える）
 CREATE TABLE IF NOT EXISTS admins (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   login_id VARCHAR(50) NOT NULL UNIQUE,
@@ -71,6 +71,9 @@ CREATE TABLE IF NOT EXISTS jobs (
   change_scope VARCHAR(255) NULL,
   contract_period VARCHAR(255) NULL,
   apply_tel VARCHAR(30) NULL,
+  image1 VARCHAR(40) NULL,
+  image2 VARCHAR(40) NULL,
+  image3 VARCHAR(40) NULL,
   status VARCHAR(10) NOT NULL DEFAULT 'draft',
   valid_until DATE NULL,
   published_at DATETIME NULL,

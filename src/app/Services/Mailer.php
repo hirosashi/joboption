@@ -16,7 +16,7 @@ final class Mailer
             return false;
         }
         $cfg = App::config()['mail'] ?? [];
-        $siteName = (string)(App::config()['site']['name'] ?? 'joboption');
+        $siteName = (string)(App::config()['site']['name'] ?? 'お仕事55号');
         $body .= "\n\n----\n" . $siteName . "\n" . self::siteUrl() . "\n";
         if (empty($cfg['enabled'])) {
             $log = dirname(__DIR__, 2) . '/storage/logs/mail.log';

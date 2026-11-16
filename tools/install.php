@@ -28,6 +28,14 @@ if (Db::driver() === 'sqlite') {
 }
 Db::conn()->exec((string)file_get_contents($schema));
 echo "schema ok\n";
+foreach (['image1', 'image2', 'image3'] as $col) {
+    try {
+        Db::value("SELECT $col FROM jobs LIMIT 1");
+    } catch (PDOException) {
+        Db::conn()->exec("ALTER TABLE jobs ADD COLUMN $col VARCHAR(40) NULL");
+        echo "jobs.$col added\n";
+    }
+}
 
 $now = Clock::nowStr();
 

@@ -42,9 +42,12 @@ final class JobController extends Base
         if ($job === null) {
             self::notFound();
         }
+        $meta = Jobs::meta($job);
         View::render('jobs/show', [
-            'title' => (string)$job['title'],
-            'description' => mb_substr((string)($job['catch_copy'] ?: $job['description']), 0, 110),
+            'title' => $meta['title'],
+            'description' => $meta['description'],
+            'ogImage' => $meta['image'],
+            'ogType' => 'article',
             'job' => $job,
             'jsonLd' => Jobs::jsonLd($job),
         ]);
