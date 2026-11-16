@@ -5,7 +5,7 @@ namespace App\Core;
 
 use PDO;
 
-/** MySQL（本番想定）と SQLite（準備サイト・ローカル）の両方で動く SQL だけを使う */
+/** MySQL と SQLite の両方で動く SQL だけを使う */
 final class Db
 {
     private static ?PDO $pdo = null;

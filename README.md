@@ -3,7 +3,7 @@
 年齢を問わず「自分のペースで働きたい」方向けのシンプルな求人サイト（55歳以上が働きやすい求人が中心。年齢制限はしない）。
 モットーは **シンプル・登録が簡単・見やすい**。
 
-- 準備サイト: https://jyunbi.sakura.ne.jp/joboption/ （管理画面は `/joboption/admin`）
+- 公開サイト: https://oshigoto55.com/ （管理画面は `/admin`）
 - 構成: PHP 8.1 + PDO（SQLite / MySQL どちらでも動く）。フレームワーク・Composer なし。
 
 ## 機能（Phase 1：運営が求人を代行登録）
@@ -20,7 +20,7 @@
 ## ディレクトリ
 
 ```
-src/                 ← 公開ディレクトリ（サーバの www/joboption に置く）
+src/                 ← 公開ディレクトリ（公開サイトのドキュメントルートに置く）
   index.php          ← フロントコントローラ（ルート一覧）
   app/Core           ← App, Router, Db, View, Csrf, Session, Auth, Validator, Clock
   app/Controllers    ← 公開側・Admin
@@ -37,21 +37,11 @@ dev_router.php       ← php -S 用
 ## ローカルで動かす
 
 ```bash
-cp src/config/config.sample.php src/config/config.local.php   # base_path を '' に、debug を true に
+cp src/config/config.sample.php src/config/config.local.php   # debug を true に
 php tools/install.php src '<管理者パスワード8文字以上>'          # 管理者IDは admin
 php -S 127.0.0.1:8090 -t src dev_router.php
 # http://127.0.0.1:8090/ ・ http://127.0.0.1:8090/admin
 ```
-
-## 準備サイトへの反映
-
-```bash
-./deploy.sh            # SAKURA_SSH_HOST / SAKURA_SSH_USER / 鍵 ~/.ssh/sakura_jo を使用
-```
-
-- サーバ側の `config/config.php` と `storage/`（DB・ログ）は上書きしない。
-- 反映前に `~/backups/joboption_YYYYmmdd_HHMMSS.tar.gz` を作る。
-- 初回のみサーバで `php tools/install.php ~/www/joboption '<パスワード>'` を実行（tools はサーバの `~/joboption_tools` に置く）。
 
 ## 規約
 
